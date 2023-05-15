@@ -1,0 +1,190 @@
+package com.hillspet.wearables.common.constants;
+
+import static com.hillspet.wearables.common.constants.Severity.THREE;
+import static com.hillspet.wearables.common.constants.Severity.TWO;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static javax.ws.rs.core.Response.Status.GATEWAY_TIMEOUT;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Response.Status;
+
+import com.hillspet.wearables.common.exceptions.ErrorDetailInterface;
+import com.hillspet.wearables.common.exceptions.SeverityInterface;
+
+/**
+ * A set of constants representing error conditions that can be thrown by the
+ * framework Application specific error codes must never be defined in this
+ * class. This class is for only framework level error code definition.
+ *
+ * @author vvodyaram
+ *
+ */
+public enum WearablesErrorCode implements ErrorDetailInterface, EnumInterface<String> {
+
+	WEARABLES_INTERNAL_SRVR_ERROR("WEARABLES_SVC_001", THREE, WearablesMessageKey.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR),
+	WEARABLES_SERVICE_RESPONSE_INVALID("WEARABLES_SVC_002", TWO, WearablesMessageKey.SERVICE_RESP_INVALID, INTERNAL_SERVER_ERROR),
+	WEARABLES_CONSTRAINT_VIOLATION_EXP("WEARABLES_CONS_VIOLATION_EXP", WearablesMessageKey.INTERNAL_SERVER_ERROR),
+	WEARABLES_WEB_APP_EXP("WEARABLES_WEB_APP_EXCEPTION", THREE, WearablesMessageKey.WEARABLES_WEB_APP_EXCEPTION, INTERNAL_SERVER_ERROR),
+	WEARABLES_SYSTEM_ERROR("WEARABLES_SYSTEM_ERROR", THREE, WearablesMessageKey.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR),
+	WEARABLES_INVALID_JSON_INPUT("WEARABLES_JSON_INPUT_INVALID", WearablesMessageKey.INVALID_JSON_INPUT),
+	WEARABLES_INVALID_BEAN_CONFIG("WEARABLES_INVALID_BEAN_CONFIG", WearablesMessageKey.INVALID_JSON_INPUT),
+	READ_TIMEOUT("WEARABLES_READ_001", THREE, WearablesMessageKey.READ_TIME_OUT, GATEWAY_TIMEOUT),
+	CONNECTION_TIMEOUT("WEARABLES_CONN_001", THREE, WearablesMessageKey.CONNECTION_TIME_OUT, GATEWAY_TIMEOUT),
+	// WEARABLES request error codes
+	APP_ID_NOT_VALID("WEARABLES_REQ_001", WearablesMessageKey.APP_ID_NOT_VALID),
+	APP_ENV_NOT_VALID("WEARABLES_REQ_002", WearablesMessageKey.APP_ENV_NOT_VALID),
+	APP_ID_NOT_FOUND("WEARABLES_REQ_020", THREE, WearablesMessageKey.APP_ID_NOT_FOUND, NOT_FOUND),
+
+	CONTENT_TYPE_INVALID("WEARABLES_REQ_017", WearablesMessageKey.CONTENT_TYPE_INVALID),
+	APP_VERSION_BLANK("WEARABLES_REQ_011", WearablesMessageKey.APP_VERSION_BLANK),
+	APP_VERSION_INVALID("WEARABLES_REQ_012", WearablesMessageKey.APP_VERSION_INVALID),
+	APP_VERSION_INVALID_LENGTH("WEARABLES_REQ_013", WearablesMessageKey.APP_VERSION_INVALID_LENGTH),
+	USR_ID_INVALID_LENGTH("WEARABLES_REQ_014", WearablesMessageKey.USERID_INVALID_LENGTH),
+	USR_ID_INVALID("WEARABLES_REQ_015", WearablesMessageKey.USERID_INVALID),
+	USR_ID_REQUIRED("WEARABLES_REQ_016", WearablesMessageKey.USR_ID_REQUIRED),
+
+	// Required Error Codes
+	FIRST_NAME_REQUIRED("WEARABLES_REQ_ERR_001", THREE, WearablesMessageKey.FIRST_NAME_REQUIRED, BAD_REQUEST),
+	EMAIL_REQUIRED("WEARABLES_REQ_ERR_002", THREE, WearablesMessageKey.EMAIL_REQUIRED, BAD_REQUEST),
+	MOBILE_NUMBER_REQUIRED("WEARABLES_REQ_ERR_003", THREE, WearablesMessageKey.MOBILE_NUMBER_REQUIRED, BAD_REQUEST),
+	ORDER_NUMBER_REQUIRED("WEARABLES_REQ_ERR_004", THREE, WearablesMessageKey.ORDER_NUMBER_REQUIRED, BAD_REQUEST),
+	PASSWORD_REQUIRED("WEARABLES_REQ_ERR_005", THREE, WearablesMessageKey.PASSWORD_REQUIRED, BAD_REQUEST),
+	NEW_PASSWORD_REQUIRED("WEARABLES_REQ_ERR_006", THREE, WearablesMessageKey.NEW_PASSWORD_REQUIRED, BAD_REQUEST),
+	CONFIRM_PASSWORD_REQUIRED("WEARABLES_REQ_ERR_007", THREE, WearablesMessageKey.CONFIRM_PASSWORD_REQUIRED, BAD_REQUEST),
+	USER_ID_REQUIRED("WEARABLES_REQ_ERR_008", THREE, WearablesMessageKey.USER_ID_REQUIRED, BAD_REQUEST),
+	
+	VERIFICATION_CODE_REQUIRED("WEARABLES_REQ_ERR_009", THREE, WearablesMessageKey.VERIFICATION_CODE_REQUIRED, BAD_REQUEST),
+	CLIENT_ID_REQUIRED("WEARABLES_REQ_ERR_010", THREE, WearablesMessageKey.CLIENT_ID_REQUIERD, BAD_REQUEST),
+	LAST_NAME_REQUIRED("WEARABLES_REQ_ERR_011", THREE, WearablesMessageKey.LAST_NAME_REQUIRED, BAD_REQUEST),
+	PHONE_NUMBER_REQUIRED("WEARABLES_REQ_ERR_012", THREE, WearablesMessageKey.PHONE_NUMBER_REQUIRED, BAD_REQUEST),
+	PET_ID_REQUIRED("WEARABLES_REQ_ERR_013", THREE, WearablesMessageKey.PET_ID_REQUIRED, BAD_REQUEST),
+	CATEGORY_REQUIRED("WEARABLES_REQ_ERR_014", THREE, WearablesMessageKey.CATEGORY_REQUIRED, BAD_REQUEST),
+	DEVICE_NUMBER_REQUIRED("WEARABLES_REQ_ERR_015", THREE, WearablesMessageKey.DEVICE_NUMBER_REQUIRED, BAD_REQUEST),
+	DURATION_REQUIRED("WEARABLES_REQ_ERR_016", THREE, WearablesMessageKey.DURATION_REQUIRED, BAD_REQUEST),
+	TIMER_DATE_REQUIRED("WEARABLES_REQ_ERR_017", THREE, WearablesMessageKey.TIMER_DATE_REQUIRED, BAD_REQUEST),
+	PAGE_NAME_REQUIRED("WEARABLES_REQ_ERR_018", THREE, WearablesMessageKey.PAGE_NAME_REQUIRED, BAD_REQUEST),
+	DEVICE_TYPE_REQUIRED("WEARABLES_REQ_ERR_019", THREE, WearablesMessageKey.DEVICE_TYPE_REQUIRED, BAD_REQUEST),
+	FEEDBACK_TEXT_REQUIRED("WEARABLES_REQ_ERR_020", THREE, WearablesMessageKey.FEEDBACK_TEXT_REQUIRED, BAD_REQUEST),
+	
+	SETUP_STATUS_REQUIRED("WEARABLES_REQ_ERR_021", THREE, WearablesMessageKey.SETUP_STATUS_REQUIRED, BAD_REQUEST),
+	SSID_REQUIRED("WEARABLES_REQ_ERR_022", THREE, WearablesMessageKey.SSID_REQUIRED, BAD_REQUEST),
+	NOTIFICATION_TYPE_REQUIRED("WEARABLES_REQ_ERR_023", THREE, WearablesMessageKey.NOTIFICATION_TYPE_REQUIRED, BAD_REQUEST),
+	PET_NAME_REQUIRED("WEARABLES_REQ_ERR_024", THREE, WearablesMessageKey.PET_NAME_REQUIRED, BAD_REQUEST),
+	PET_GENDER_REQUIRED("WEARABLES_REQ_ERR_025", THREE, WearablesMessageKey.PET_GENDER_REQUIRED, BAD_REQUEST),
+	IS_NEUTERED_REQUIRED("WEARABLES_REQ_ERR_026", THREE, WearablesMessageKey.IS_NEUTERED_REQUIRED, BAD_REQUEST),
+	WEIGHT_REQUIRED("WEARABLES_REQ_ERR_027", THREE, WearablesMessageKey.WEIGHT_REQUIRED, BAD_REQUEST),
+	WEIGHT_UNIT_REQUIRED("WEARABLES_REQ_ERR_028", THREE, WearablesMessageKey.WEIGHT_UNIT_REQUIRED, BAD_REQUEST),
+	IS_MIXED_REQUIRED("WEARABLES_REQ_ERR_029", THREE, WearablesMessageKey.IS_MIXED_REQUIRED, BAD_REQUEST),
+	BREED_ID_REQUIRED("WEARABLES_REQ_ERR_030", THREE, WearablesMessageKey.BREED_ID_REQUIRED, BAD_REQUEST),
+	DEVICE_ADD_DATE_REQUIRED("WEARABLES_REQ_ERR_031", THREE, WearablesMessageKey.DEVICE_ADD_DATE_REQUIRED, BAD_REQUEST),
+	
+	
+
+	INVALID_EMAIL("WEARABLES_INVAL_ERR_006", THREE, WearablesMessageKey.INVALID_EMAIL, BAD_REQUEST),
+	INVALID_PASSWORD("WEARABLES_INVAL_ERR_001", THREE, WearablesMessageKey.INVALID_PASSWORD, BAD_REQUEST),
+	INVALID_NEW_PASSWORD("WEARABLES_INVAL_ERR_002", THREE, WearablesMessageKey.INVALID_NEW_PASSWORD, BAD_REQUEST),
+	INVALID_CONFIRM_PASSWORD("WEARABLES_INVAL_ERR_003", THREE, WearablesMessageKey.INVALID_CONFIRM_PASSWORD, BAD_REQUEST),
+	INVALID_PASSWORD_NEW_PASSWORD("WEARABLES_INVAL_ERR_004", THREE, WearablesMessageKey.INVALID_PASSWORD_NEW_PASSWORD, BAD_REQUEST),
+	INVALID_NEW_CONFIRM_PASSWORD("WEARABLES_INVAL_ERR_005", THREE, WearablesMessageKey.INVALID_NEW_CONFIRM_PASSWORD, BAD_REQUEST),
+	INVALID_PASSWORD_LENGTH("WEARABLES_INVAL_ERR_007", THREE, WearablesMessageKey.INVALID_PASSWORD_LENGTH, BAD_REQUEST),
+	INVALID_NEW_PASSWORD_LENGTH("WEARABLES_INVAL_ERR_008", THREE, WearablesMessageKey.INVALID_NEW_PASSWORD_LENGTH, BAD_REQUEST),
+	INVALID_CONFIRM_PASSWORD_LENGTH("WEARABLES_INVAL_ERR_009", THREE, WearablesMessageKey.INVALID_CONFIRM_PASSWORD_LENGTH, BAD_REQUEST),
+
+	INVALID_DEVICE_NUMBER("WEARABLES_INVAL_ERR_010", THREE, WearablesMessageKey.INVALID_DEVICE_NUMBER, BAD_REQUEST),
+	INVALID_STUDY_VIRTUAL_STUDY_ALREADY_MAPPED("WEARABLES_INVAL_ERR_011", THREE, WearablesMessageKey.INVALID_STUDY_VIRTUAL_STUDY_ALREADY_MAPPED, BAD_REQUEST),
+	
+	// Not Found Error Codes
+	USERNAME_NOT_FOUND("WEARABLES_NOT_FOUND_ERR_001", THREE, WearablesMessageKey.USERNAME_NOT_FOUND, NOT_FOUND),
+	INCORRECT_PASSWORD("WEARABLES_INCRCT_ERR_001", THREE, WearablesMessageKey.INCORRECT_PASSWORD, BAD_REQUEST),
+	
+	AUTHORIZATION_FAILED("WEARABLES_TKN_003", TWO, WearablesMessageKey.AUTHORIZATION_FAILED, FORBIDDEN),
+	AUTHENTICATION_FAILED("WEARABLES_TKN_004", TWO, WearablesMessageKey.AUTHENTICATION_FAILED, UNAUTHORIZED),
+
+	WEARABLES_INVALID_CONDITION("WEARABLES_VAL_001", TWO, WearablesMessageKey.WEARABLES_VAL_ERROR, BAD_REQUEST),
+	CACHE_REGION_REQUIRED("WEARABLES_CACHE_001", WearablesMessageKey.CACHE_REGION_REQUIRED),
+	CACHE_REGION_INVALID("WEARABLES_CACHE_002", WearablesMessageKey.CACHE_REGION_INVALID),
+	CACHE_REGION_KEY_INVALID("WEARABLES_CACHE_003", WearablesMessageKey.CACHE_REGION_KEY_INVALID),
+
+	// Executor service error codes
+	EXECUTOR_SERVICE_INPROGRESS("EXEC_SVC_001", WearablesMessageKey.EXEC_SVC_INPROGRESS);
+
+	private String code;
+
+	private MessageKeyInterface key;
+
+	private SeverityInterface severity;
+
+	private Status errorStatus;
+
+	private WearablesErrorCode(String code, SeverityInterface severity, MessageKeyInterface msg, Status status) {
+		this.code = code;
+		this.severity = severity;
+		this.key = msg;
+		this.errorStatus = status;
+	}
+
+	private WearablesErrorCode(String code, MessageKeyInterface msg) {
+		this.code = code;
+		this.severity = THREE;
+		this.key = msg;
+		this.errorStatus = BAD_REQUEST;
+
+	}
+
+	/**
+	 * Lookup method to return the Enum corresponding to the code
+	 *
+	 * @param code
+	 * @return
+	 */
+	public static Optional<WearablesErrorCode> get(@NotNull String code) {
+		final List<WearablesErrorCode> errorCodes = Arrays.asList(values());
+		return errorCodes.stream().filter(errorCode -> errorCode.getCode().equalsIgnoreCase(code)).findFirst();
+	}
+
+	@Override
+	public String getCode() {
+		return code;
+	}
+
+	@Override
+	public String getErrorCode() {
+		return code;
+	}
+
+	@Override
+	public MessageKeyInterface getKey() {
+		return key;
+	}
+
+	@Override
+	public SeverityInterface getSeverity() {
+		return severity;
+	}
+
+	@Override
+	public Integer getStatus() {
+		return errorStatus.getStatusCode();
+	}
+
+	@Override
+	public String getErrorMessage() {
+		return code;
+	}
+
+	/**
+	 * @return the errorStatus
+	 */
+	public Status getErrorStatus() {
+		return errorStatus;
+	}
+
+}

@@ -1,0 +1,76 @@
+image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+pipelines:
+  custom:
+    develop:
+      - step:
+          script:
+            - export BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+            - export BITBUCKET_COMMIT_SHORT=$(git rev-parse --short HEAD)
+            - echo $BITBUCKET_COMMIT_SHORT
+            - echo $GCP_SERVICE_ACCOUNT_KEY | base64 -d > gcloud-service-key.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="`pwd`/gcloud-service-key.json"
+            - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+            - gcloud config set project $GCP_PROJECT_ID
+            - gcloud auth configure-docker us-central1-docker.pkg.dev
+            - docker build -t us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --build-arg   SPRING_PROFILE=$BRANCH .
+            - docker push us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT
+            - gcloud run deploy wms-$BRANCH --region=us-central1 --image=us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --service-account=wms-sa@ct-wearables-portal-pf.iam.gserviceaccount.com --allow-unauthenticated --vpc-connector=projects/ct-wearables-host-pf/locations/us-central1/connectors/ct-wearable-connector --platform=managed --set-cloudsql-instances=ct-wearables-portal-pf:us-central1:pr-hpndbdev-1
+          services:
+            - docker
+          caches:
+            - docker
+
+    qa:
+      - step:
+          script:
+            - export BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+            - export BITBUCKET_COMMIT_SHORT=$(git rev-parse --short HEAD)
+            - echo $BITBUCKET_COMMIT_SHORT
+            - echo $GCP_SERVICE_ACCOUNT_KEY | base64 -d > gcloud-service-key.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="`pwd`/gcloud-service-key.json"
+            - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+            - gcloud config set project $GCP_PROJECT_ID            
+            - gcloud auth configure-docker us-central1-docker.pkg.dev
+            - docker build -t us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --build-arg   SPRING_PROFILE=$BRANCH .
+            - docker push us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT
+            - gcloud run deploy wms-$BRANCH --region=us-central1 --image=us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --service-account=wms-sa@ct-wearables-portal-pf.iam.gserviceaccount.com --allow-unauthenticated --vpc-connector=projects/ct-wearables-host-pf/locations/us-central1/connectors/ct-wearable-connector --platform=managed --set-cloudsql-instances=ct-wearables-portal-pf:us-central1:pr-hpndbdev-1
+          services:
+            - docker
+          caches:
+            - docker
+    uat:
+      - step:
+          script:
+            - export BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+            - export BITBUCKET_COMMIT_SHORT=$(git rev-parse --short HEAD)
+            - echo $BITBUCKET_COMMIT_SHORT
+            - echo $GCP_SERVICE_ACCOUNT_KEY | base64 -d > gcloud-service-key.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="`pwd`/gcloud-service-key.json"
+            - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+            - gcloud config set project $GCP_PROJECT_ID
+            - gcloud auth configure-docker us-central1-docker.pkg.dev
+            - docker build -t us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --build-arg   SPRING_PROFILE=$BRANCH .
+            - docker push us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT
+            - gcloud run deploy wms-$BRANCH --region=us-central1 --image=us-central1-docker.pkg.dev/ct-wearables-portal-pf/wearables-mobile-services/wearables-mobile-services:$BRANCH-$BITBUCKET_COMMIT_SHORT --service-account=wms-sa@ct-wearables-portal-pf.iam.gserviceaccount.com --allow-unauthenticated --vpc-connector=projects/ct-wearables-host-pf/locations/us-central1/connectors/ct-wearable-connector --platform=managed --set-cloudsql-instances=ct-wearables-portal-pf:us-central1:pr-hpndbdev-1
+          services:
+            - docker
+          caches:
+            - docker
+
+    master:
+      - step:
+          script:
+            - export BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+            - export BITBUCKET_COMMIT_SHORT=$(git rev-parse --short HEAD)
+            - echo $BITBUCKET_COMMIT_SHORT
+            - echo $GCP_PROD_SERVICE_ACCOUNT_KEY | base64 -d > gcloud-service-key.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="`pwd`/gcloud-service-key.json"
+            - gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+            - gcloud config set project $GCP_PROD_PROJECT_ID            
+            - gcloud auth configure-docker us-central1-docker.pkg.dev
+            - docker build -t us-central1-docker.pkg.dev/ct-wearables-portal-prod/pr-wms-prod/pr-wms-prod:$BRANCH-$BITBUCKET_COMMIT_SHORT --build-arg   SPRING_PROFILE=$BRANCH .
+            - docker push us-central1-docker.pkg.dev/ct-wearables-portal-prod/pr-wms-prod/pr-wms-prod:$BRANCH-$BITBUCKET_COMMIT_SHORT
+          services:
+            - docker
+          caches:
+            - docker

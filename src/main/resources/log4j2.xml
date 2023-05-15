@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Properties>
+		<Property name="LOG_PATTERN">
+			%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName}
+			--- [%15.15t] %-40.40c{1.} : %m%n%ex
+		</Property>
+		<Property name="APP_LOG_ROOT">D:/WEARABLES/logs</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT"
+			follow="true">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+		</Console>
+
+		<!-- Rolling File Appender -->
+		<RollingFile name="FileAppender"
+			fileName="${APP_LOG_ROOT}/wearables.log"
+			filePattern="${APP_LOG_ROOT}/wearables-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<Pattern>${LOG_PATTERN}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+
+		<Logger name="com.hillspet.wearables" level="DEBUG" additivity="false">
+			<AppenderRef ref="FileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Logger>
+
+		<!-- <Root level="DEBUG" additivity="false"> <AppenderRef level="DEBUG" 
+			ref="FileAppender" /> </Root> -->
+
+		<!-- <Logger name="com.hillspet.wearables" level="DEBUG" additivity="false"> <AppenderRef 
+			ref="FileAppender" /> </Logger> -->
+		<Root level="ERROR">
+			<AppenderRef ref="FileAppender" />
+			<AppenderRef ref="ConsoleAppender" />
+		</Root>
+
+		<!-- <Root level="ERROR" additivity="false"> <AppenderRef level="ERROR" 
+			ref="FileAppender" /> <AppenderRef level="ERROR" ref="ConsoleAppender" /> 
+			</Root> <Logger name="com.hillspet.wearables" level="DEBUG" additivity="false"> <Appender-ref 
+			ref="FileAppender" level="DEBUG" /> </Logger> -->
+
+		<!-- <Logger name="org.springframework" level="ERROR" additivity="false"> 
+			<Appender-ref ref="FileAppender" level="ERROR" /> </Logger> <Logger name="org.hibernate" 
+			level="ERROR" additivity="false"> <Appender-ref ref="FileAppender" level="ERROR" 
+			/> </Logger> -->
+
+	</Loggers>
+</Configuration>
